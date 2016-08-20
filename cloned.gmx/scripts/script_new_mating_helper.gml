@@ -3,9 +3,9 @@ parent_grid[0] = argument0;
 parent_grid[1] = argument1;
 var child=ds_grid_create(ds_grid_width(parent_grid[0]), ds_grid_height(parent_grid[0]));
 
-var mutation_rate=0.05;
+var mutation_rate=0.005;
 
-var a = argument2 + argument3 + argument4;
+//var a = argument2 + argument3 + argument4;
 
 //show_message("[" + string(argument4) + "] <- [" + string(argument2) + "] + [" + string(argument3) + "]");
 

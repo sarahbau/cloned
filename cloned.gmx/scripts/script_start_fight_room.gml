@@ -22,7 +22,9 @@ with(controller_obj[1]) {
     fighter.player=1;
     if(controller_obj[1].is_ai) {
         if(training_mode) {
-            ai_grid=global.p2_ai_array[ai_training_instance];
+            //Temporarily setting player2 to use default AI
+            //ai_grid=global.p2_ai_array[ai_training_instance];
+            ai_grid = global.p2_ai_array;
         } else {
             ai_grid=script_default_ai_grid();
         }

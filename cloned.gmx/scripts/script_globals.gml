@@ -26,7 +26,7 @@ globalvar ai_training_instance;
 ai_training_instance=0;
 
 globalvar ai_training_generation;
-ai_training_generation=1;
+ai_training_generation=0;
 
 globalvar ai_training_total;
 ai_training_total=0;
