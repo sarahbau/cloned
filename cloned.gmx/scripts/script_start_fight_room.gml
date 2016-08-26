@@ -11,7 +11,7 @@ with(controller_obj[0]) {
     fighter.player=0;
     if(controller_obj[0].is_ai) {
         if(training_mode) {
-            ai_grid=global.p1_ai_array[ai_training_instance];
+            ai_grid=global.p1_ai_array[ai_training_instance%array_length_1d(global.p1_ai_array)];
         } else {
             ai_grid=script_default_ai_grid();
         }

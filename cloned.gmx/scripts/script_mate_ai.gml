@@ -2,7 +2,7 @@
 var fighter = global.player1
 var ai_array;
 var ai_fitness_array;
-var num_to_carry_over = 20;
+var num_to_carry_over = 4;
 
 if(argument0==0) {
     ai_array=global.p1_ai_array;
@@ -16,14 +16,14 @@ if(argument0==0) {
 
 var temp;
 var temp_sort_grid;
-var array_length = array_length_1d(ai_fitness_array);
+var array_length = array_length_1d(ai_array);
 
-//show_message("sorting");
-
+// Fitness will be on a range from -5 to 5. Update to make it 0 to 10
 for(var i=0;i<array_length;i++) {
-    ai_fitness_array[i] += 1;
+    ai_fitness_array[i] += 5;
 }
 
+// Sort by fitness
 for(var i=0;i<array_length;i++) {
     for(var j = i + 1; j < array_length; j += 1 ) {
         if(ai_fitness_array[j]>ai_fitness_array[i]) {
@@ -37,12 +37,6 @@ for(var i=0;i<array_length;i++) {
         }
     }
 }
-
-//var message = "Fitness:";
-//for(var i = 0;i<arrayLength;i++) {
-//    message = message + "  " + string(ai_fitness_array[i]);
-//}
-//show_debug_message(message);
 
 var temp_array;
 var temp_grid;
@@ -61,73 +55,51 @@ for(var i=0; i<array_length; i++) {
         top_fit += ai_fitness_array[i];
     }
 }
+//total_fit = total_fit/array_length * global.ai_pop;
 global.fitness1 = total_fit;
-global.top20fit1 = top_fit;
+global.top20fit1 = top_fit * (array_length/num_to_carry_over);
 global.topfit1 = ai_fitness_array[0];
 
 // Normalize the fitnesses
+var fit_tot = 0;
+var fit_string = ""
 for(var i=0; i<array_length; i++) {
     ai_fitness_array[i] = ai_fitness_array[i]/total_fit;
+    fit_string = fit_string + string(ai_fitness_array[i]) + ", "
+    fit_tot += ai_fitness_array[i];
 }
+//show_debug_message(fit_string);
+//show_debug_message("This number should be 1.0: " + string(fit_tot));
 
-// Mate the top 80 with random
-for(var i=0; i<array_length-num_to_carry_over; i++) {
+//show_debug_message("Right before loop, pop_size is " + string(array_length));
+// Mate the top half with random
+for(var i=0; i<(array_length-num_to_carry_over); i++) {
     var r = random(1);
     //show_message("Looking for fitness better than " + string(r));
     var fit_sum = 0;
     for(var j=array_length-1; j>=0; j--) {
         fit_sum += ai_fitness_array[j];
         if((fit_sum >= r)) {
+            //show_debug_message("Mating " + string(i) + " with " + string(j) + " with r of " + string(r));
+            //show_debug_message("i+1 = " + string(i+1));
             temp_array[i+num_to_carry_over] = script_new_mating_helper(ai_array[i], ai_array[j]);
+            //if(i+num_to_carry_over+array_length/2 < array_length) temp_array[i+array_length/2+num_to_carry_over] = script_new_mating_helper(ai_array[j], ai_array[i]);
             break;
         }
     }
 }
+//show_debug_message("Right after loop, pop_size is " + string(array_length_1d(temp_array)));
 
+// If array length is odd, we'll have an empty space at the end. Copy the best performer to the next generation
+//if(array_length%2 == 1) temp_array[array_length-1]= ai_array[0];
 
-/**** Old version 
-
-//Mate the best 10 with the second best 10 - yields 10 offspring
-//Copy best 10 to next generation - yields 10
-for(var a=0;a<10;a++) {
-    temp_array[pos]=ai_array[a];
-    pos++;
-    temp_grid=script_new_mating_helper(ai_array[a], ai_array[a+10], a, a+10, pos);
-    temp_array[pos]=temp_grid;
-    pos++;
-}
-
-
-
-//Mate 1-80 with random - yields 80 offspring
-for(var b=0;b<array_length_1d(ai_array)-20;b++) {
-    var second = irandom(array_length_1d(ai_array)-1);
-    temp_grid=script_new_mating_helper(ai_array[b], ai_array[second], b, second, pos);
-    temp_array[pos]=temp_grid;
-    pos++;
-}
-
-****************/
-
-
-//Shuffle the array so the best fighters don't always fight the best.
+/* Shuffle the array so the best fighters don't always fight the best.
 var l=ds_list_create()
 for (var arr=0; arr<array_length_1d(temp_array); arr+=1) ds_list_add(l,temp_array[arr])
 ds_list_shuffle(l)
 for (var arr2=0; arr2<array_length_1d(temp_array); arr2+=1) temp_array[arr2]=ds_list_find_value(l,arr2)
 ds_list_destroy(l)
-
-
-
-//for(var i=0;i<array_length_1d(temp_array);i++) {
-//    for(var j=0;j<ds_grid_height(temp_array[i]);j++) {
-//        var message = string(j) + ":";
-//        for(var k=0;k<ds_grid_width(temp_array[i]);k++) {
-//            message = message + "  " + string(ds_grid_get(temp_array[i], k,j));
-//        }
-//        show_debug_message(message);
-//    }
-//}
+*/
 
 script_save_ai_generation(fighter, temp_array);
 

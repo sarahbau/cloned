@@ -34,5 +34,15 @@ ai_training_total=0;
 globalvar training_mode;
 training_mode=false;
 
+globalvar ai_pop;
+ai_pop = 100;
+
 globalvar ai_fitness_1;
+ai_fitness_1[ai_pop-1]=0;
 globalvar ai_fitness_2;
+ai_fitness_2[ai_pop-1]=0;
+
+globalvar ai_opponent;
+ai_opponent = 0;
+
+

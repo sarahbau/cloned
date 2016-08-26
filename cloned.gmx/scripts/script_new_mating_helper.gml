@@ -3,12 +3,13 @@ parent_grid[0] = argument0;
 parent_grid[1] = argument1;
 var child=ds_grid_create(ds_grid_width(parent_grid[0]), ds_grid_height(parent_grid[0]));
 
-var mutation_rate=0.005;
+var mutation_rate=0.05;
 
 //var a = argument2 + argument3 + argument4;
 
 //show_message("[" + string(argument4) + "] <- [" + string(argument2) + "] + [" + string(argument3) + "]");
 
+/* Old Method - copy the probability of an action in each state from a random parent
 //Loop through each state
 for(var i=0;i<ds_grid_height(parent_grid[0]);i++) {
     // Loop through each action probability and pick a random one
@@ -23,6 +24,43 @@ for(var i=0;i<ds_grid_height(parent_grid[0]);i++) {
         }
     }
 }
+*/
+
+/* New Method - Copy an entire state from a parent, then potentially mutate based on that */
+//Loop through each state
+for(var i=0;i<ds_grid_height(parent_grid[0]);i++) {
+    // Pick a random parent from which to copy a state
+    var r = irandom(1);
+    
+    // Updating to mutate entire state rather than only one probability of state
+    var mutate = random(1)<mutation_rate;
+    for(var j=0;j<8;j++) {
+        var p = ds_grid_get(parent_grid[r],j,i);
+        if(mutate) {
+            // Mutate the gene by multiplying it by a random number between 0.75 and 1.25
+            //p = clamp((p + random(2) -1),0,10);
+            
+            // Mutate by giving a random value
+            p = irandom(9);
+        }
+        ds_grid_set(child,j,i,p);
+    }
+}
+
+/* Print parents and child to see which genes are passed on and mutate
+for(var i=0;i<ds_grid_height(parent_grid[0]);i++) {
+    var p1_row = "", p2_row = "", c_row = "";
+    for(var j=0;j<8;j++) {
+        p1_row = p1_row + string(ds_grid_get(parent_grid[0], j, i)) + " ";
+        p2_row = p2_row + string(ds_grid_get(parent_grid[1], j, i)) + " ";
+        c_row = c_row + string(ds_grid_get(child, j, i)) + " ";
+    }
+    show_debug_message(p1_row + "    " + p2_row + "    " + c_row);
+}
+show_debug_message(" ");
+*/
+
+
 
 //for(var i=0;i<ds_grid_height(parent_grid[0]);i++) {
 //    var p1_message = "Parent 1: ";
