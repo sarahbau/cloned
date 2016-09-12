@@ -39,6 +39,7 @@ mask_punching   = mask_wukong_punch;
 mask_kicking    = mask_wukong_kick;
 mask_special    = mask_wukong_special;
 sprite_index = sprite_standing;
+height = 159;
 
 // Sprite stuff
 //image_xscale=1;

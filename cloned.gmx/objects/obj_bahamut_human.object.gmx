@@ -50,6 +50,7 @@ image_speed = base_image_speed;
 punch_range=90;
 kick_range=158;
 mask_offset=54;
+height = 215;
 
 // Damages
 punch_damage=24;

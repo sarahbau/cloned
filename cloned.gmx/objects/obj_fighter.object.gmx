@@ -38,6 +38,7 @@ base_image_speed=0.25;
 player=-1;
 opponent = self;
 facing_right = true;
+height = 0;
 
 
 // Sprite settings

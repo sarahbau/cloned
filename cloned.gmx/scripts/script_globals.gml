@@ -45,4 +45,5 @@ ai_fitness_2[ai_pop-1]=0;
 globalvar ai_opponent;
 ai_opponent = 0;
 
-
+globalvar ai_train_start;
+ai_train_start = false;

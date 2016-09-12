@@ -129,6 +129,55 @@
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>611</id>
+        <kind>6</kind>
+        <userelative>-1</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>setup_part</string>
+          </argument>
+          <argument>
+            <kind>0</kind>
+            <string>false</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="1" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>part_emitter_destroy(part_system, part_emitter);
+part_type_destroy(beam_particle);
+part_system_destroy(part_system);
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="3" enumb="0">
       <action>
@@ -147,13 +196,52 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if(step==room_speed/2) instance_destroy();
+            <string>if(!setup_part) {
+part_system = part_system_create();
+part_system_depth(part_system,-2000);
+part_system_position(part_system, fighter.x+(45*fighter.image_xscale),fighter.y-321);
+beam_particle = part_type_create();
+part_type_shape(beam_particle, pt_shape_spark);
+part_type_scale(beam_particle,0.3,0.4);
+part_type_color_mix(beam_particle, c_red, c_yellow);
+part_emitter = part_emitter_create(part_system);
+diff_x = opp.x-(fighter.x+(45*fighter.image_xscale))
+diff_y = (opp.y-(2*opp.height/3))-(fighter.y-321)
+if(fighter.x &lt; opp.x) {
+    part_emitter_region(part_system, part_emitter, 0, diff_x, 0, diff_y, ps_shape_line , ps_distr_linear);
+} else {
+    part_emitter_region(part_system, part_emitter, diff_x, 0, diff_y, 0, ps_shape_line , ps_distr_linear);
+}
+setup_part = true;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>if(step==15) instance_destroy();
 step++;
 //if(!did_hit) {
-    var ox = opp_x;
-    var oy = opp_y;
+    var ox = opp.x;
+    var oy = opp.y - (2*opp.height/3);
+    //show_debug_message("Collides with (" + string(ox) + ", " + string(oy) + ")");
     with(fighter) {
-        if(collision_line(x-45,y-321,ox,oy-60,obj_fighter,false,true) == noone) {
+        if(collision_line(x-45,y-321,ox,oy,obj_fighter,false,true) == noone) {
             exit;
         }
     }
@@ -183,9 +271,10 @@ step++;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if(is_undefined(fighter)) exit;
+            <string>if(setup_part) part_emitter_stream(part_system, part_emitter, beam_particle,50);
+
 draw_set_color(c_red);
-draw_line_width(fighter.x-45,fighter.y-321,opp_x,opp_y-60, 5);
+//draw_line_width(fighter.x-45,fighter.y-321,opp_x,opp_y-60, 5);
 draw_set_color(c_black);
 
 </string>

@@ -74,8 +74,9 @@ switch(my_fighter.fighter_name) {
         if(my_fighter.dragon) {
             var o = instance_create(0,0,obj_special_bahamut);
             o.fighter = my_fighter;
-            o.opp_x = my_fighter.opponent.x;
-            o.opp_y = my_fighter.opponent.y;
+            o.opp = my_fighter.opponent;
+            //o.opp_x = my_fighter.opponent.x;
+            //o.opp_y = my_fighter.opponent.y;
         } else {
             var hitbox_obj=instance_create(my_fighter.x,my_fighter.y,obj_hitbox);
             with(hitbox_obj) {    
